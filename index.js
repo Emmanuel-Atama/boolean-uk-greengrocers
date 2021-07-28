@@ -189,6 +189,10 @@ function renderStoreItemList(items) {
     buttonEl.innerText = "Add To Cart";
     listItemEl.append(buttonEl);
     // console.log("ButtonEl: ", buttonEl);
+
+    buttonEl.addEventListener("click", (event) => {
+      console.log("click");
+    });
   }
 }
 renderStoreItemList(storeData);
