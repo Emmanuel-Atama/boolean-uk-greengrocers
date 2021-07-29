@@ -245,29 +245,26 @@ function addToCart(storeItem, cartData) {
 
   for (let i = 0; i < cartData.length; i++) {
     const cartItem = cartData[i];
-    console.log("Inside Cart: ", cartItem);
+    // console.log("Inside Cart: ", cartItem);
 
     const cartItemId = cartItem.item.id;
     const storeItemId = storeItem.id;
-    console.log("Inside the loop: ", cartItemId, storeItemId);
+    // console.log("Inside the loop: ", cartItemId);
+
+    if (cartItemId === storeItemId) {
+      foundItem = true;
+      cartItem.quantity += 1;
+    }
   }
-  const newCartItem = {
-    item: storeItem,
-    quantity: 1
-  };
-  cartData.push(newCartItem);
-
-  console.log(newCartItem);
-
-  // console.log("Inside addToCart: ", addToCart);
-
-  // let foundItem = false;
-  // console.log(foundItem)
-
-  //   const cartId = cartItem.item.id;
-
-  //   const storeDataId = storeData.id;
+  if (!foundItem) {
+    const newCartItem = {
+      item: storeItem,
+      quantity: 1
+    };
+    cartData.push(newCartItem);
+  }
+  console.log("Inside CartData: ", cartData);
 }
 addToCart(storeData[0], cartData);
-// addToCart(storeData[0], cartData);
-// addToCart(storeData[0], cartData);
+addToCart(storeData[0], cartData);
+addToCart(storeData[0], cartData);
