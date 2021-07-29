@@ -185,66 +185,81 @@ function renderStoreItemList(items) {
     imageEl.setAttribute("alt", item.name);
     containerEl.append(imageEl);
 
-    const buttonEl = document.createElement("button");
-    buttonEl.innerText = "Add To Cart";
-    listItemEl.append(buttonEl);
-    // console.log("ButtonEl: ", buttonEl);
-
-    buttonEl.addEventListener("click", (event) => {
+    const addCartButtonEl = document.createElement("button");
+    addCartButtonEl.innerText = "Add To Cart";
+    listItemEl.append(addCartButtonEl);
+    // console.log("ButtonEl: ", addCartButtonEl);
+    addCartButtonEl.addEventListener("click", (event) => {
       console.log("click");
+      addToCart(item, cartData);
+      renderCartItems(cartData);
     });
   }
 }
 renderStoreItemList(storeData);
 
 const cartItemListEl = document.querySelector(".cart--item-list");
-console.log("cartItemListEl: ", cartItemListEl);
+console.log("cartItemListEl: ", cartItemListEl)
 
-// function renderCartItems(items) {
-//   for (let i = 0; i < items.length; i++) {
-//     const cart = items[i];
-//     // console.log("Inside RenderCart: ", cart)
+function renderCartItems(items) {
 
-//     const listItemEl = document.createElement("li");
-//     cartItemListEl.append(listItemEl);
-//     // console.log("listItemEl: ", listItemEl)
+  cartItemListEl.innerHTML = "";
 
-//     const imageEl = document.createElement("img");
-//     const imageSrcEl = cart.item.image_src;
-//     // console.log("Image Source: ", imageSrc);
-//     imageEl.setAttribute("src", imageSrcEl);
-//     imageEl.setAttribute("alt", cart.item.name);
-//     listItemEl.append(imageEl);
+  for (let i = 0; i < items.length; i++) {
+    const cart = items[i];
+    // console.log("Inside RenderCart: ", cart)
 
-//     const paragraphEl = document.createElement("p");
-//     paragraphEl.innerText = cart.item.name;
-//     listItemEl.append(paragraphEl);
+    const listItemEl = document.createElement("li")
+    cartItemListEl.append(listItemEl)
+    // console.log("listItemEl: ", listItemEl)
 
-//     const removeButtonEl = document.createElement("button");
-//     // console.log("Button: ", removeButtonEl)
-//     removeButtonEl.className = "quantity-btn remove-btn center";
-//     removeButtonEl.innerText = "-";
-//     listItemEl.append(removeButtonEl);
+    const imageEl = document.createElement("img")
+    const imageSrcEl = cart.item.image_src;
+    // console.log("Image Source: ", imageSrc);
+    imageEl.setAttribute("src", imageSrcEl);
+    imageEl.setAttribute("alt", cart.item.name);
+    listItemEl.append(imageEl);
 
-//     const spanEl = document.createElement("span");
-//     spanEl.innerText = 1;
-//     spanEl.className = "quantity-text center";
-//     listItemEl.append(spanEl);
+    const paragraphEl = document.createElement("p");
+    paragraphEl.innerText = cart.item.name;
+    listItemEl.append(paragraphEl);
 
-//     const addButtonEl = document.createElement("button");
-//     // console.log("Button: ", addButtonEl)
-//     addButtonEl.className = "quantity-btn add-btn center";
-//     addButtonEl.innerText = "+";
-//     listItemEl.append(addButtonEl);
-//   }
-// }
-// renderCartItems(cartData);
+    const removeButtonEl = document.createElement("button");
+    // console.log("Button: ", removeButtonEl)
+    removeButtonEl.className = "quantity-btn remove-btn center";
+    removeButtonEl.innerText = "-";
+    listItemEl.append(removeButtonEl);
+    removeButtonEl.addEventListener("click", (event) => {
+      console.log("click");
+      addToCart(cart, cartData);
+      renderCartItems(cartData);
+    });
+
+    const spanEl = document.createElement("span");
+    spanEl.innerText = 1;
+    spanEl.className = "quantity-text center";
+    listItemEl.append(spanEl);
+
+    const addButtonEl = document.createElement("button");
+    // console.log("Button: ", addButtonEl)
+    addButtonEl.className = "quantity-btn add-btn center";
+    addButtonEl.innerText = "+";
+    listItemEl.append(addButtonEl);
+    addButtonEl.addEventListener("click", (event) => {
+      console.log("click");
+      addToCart(cart, cartData);
+      renderCartItems(cartData);
+    });
+    cartItemListEl.append(listItemEl)
+  }
+}
+renderCartItems(cartData)
 
 function addToCart(storeItem, cartData) {
-  let foundItem = false;
+  let foundItem = false
 
   for (let i = 0; i < cartData.length; i++) {
-    const cartItem = cartData[i];
+    const cartItem = cartData[i]
     // console.log("Inside Cart: ", cartItem);
 
     const cartItemId = cartItem.item.id;
@@ -253,18 +268,18 @@ function addToCart(storeItem, cartData) {
 
     if (cartItemId === storeItemId) {
       foundItem = true;
-      cartItem.quantity += 1;
+      cartItem.quantity += 1
     }
   }
   if (!foundItem) {
     const newCartItem = {
       item: storeItem,
       quantity: 1
-    };
-    cartData.push(newCartItem);
+    }
+    cartData.push(newCartItem)
   }
   console.log("Inside CartData: ", cartData);
 }
-addToCart(storeData[0], cartData);
-addToCart(storeData[0], cartData);
-addToCart(storeData[0], cartData);
+addToCart(storeData[0], cartData)
+addToCart(storeData[0], cartData)
+
