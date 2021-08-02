@@ -159,102 +159,6 @@ const cartData = [
   // }
 ];
 
-//Bridge
-// const storeEl = document.querySelector("#store");
-// console.log("Store: ", storeEl);
-const storeItemListEl = document.querySelector(".store--item-list");
-console.log("storeItemListEl: ", storeItemListEl);
-
-function renderStoreItemList(items) {
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
-    // console.log("Item: ", item)
-    const listItemEl = document.createElement("li");
-    // console.log("Inside li: ", listItemEl);
-    storeItemListEl.append(listItemEl);
-
-    const containerEl = document.createElement("div");
-    // console.log("Inside containerEl: ", containerEl);
-    containerEl.className = "store--item-icon";
-    listItemEl.append(containerEl);
-
-    const imageEl = document.createElement("img");
-    const imageSrcEl = item.image_src;
-    // console.log("Image Source: ", imageSrc);
-    imageEl.setAttribute("src", imageSrcEl);
-    imageEl.setAttribute("alt", item.name);
-    containerEl.append(imageEl);
-
-    const addCartButtonEl = document.createElement("button");
-    addCartButtonEl.innerText = "Add To Cart";
-    listItemEl.append(addCartButtonEl);
-    // console.log("ButtonEl: ", addCartButtonEl);
-    addCartButtonEl.addEventListener("click", (event) => {
-      console.log("click");
-      addToCart(item, cartData);
-      renderCartItems(cartData);
-    });
-  }
-}
-renderStoreItemList(storeData);
-
-const cartItemListEl = document.querySelector(".cart--item-list");
-console.log("cartItemListEl: ", cartItemListEl)
-
-function renderCartItems(items) {
-
-  cartItemListEl.innerHTML = "";
-
-  for (let i = 0; i < items.length; i++) {
-    const cart = items[i];
-    // console.log("Inside RenderCart: ", cart)
-
-    const listItemEl = document.createElement("li")
-    cartItemListEl.append(listItemEl)
-    // console.log("listItemEl: ", listItemEl)
-
-    const imageEl = document.createElement("img")
-    const imageSrcEl = cart.item.image_src;
-    // console.log("Image Source: ", imageSrc);
-    imageEl.setAttribute("src", imageSrcEl);
-    imageEl.setAttribute("alt", cart.item.name);
-    listItemEl.append(imageEl);
-
-    const paragraphEl = document.createElement("p");
-    paragraphEl.innerText = cart.item.name;
-    listItemEl.append(paragraphEl);
-
-    const removeButtonEl = document.createElement("button");
-    // console.log("Button: ", removeButtonEl)
-    removeButtonEl.className = "quantity-btn remove-btn center";
-    removeButtonEl.innerText = "-";
-    listItemEl.append(removeButtonEl);
-    removeButtonEl.addEventListener("click", (event) => {
-      console.log("click");
-      addToCart(cart, cartData);
-      renderCartItems(cartData);
-    });
-
-    const spanEl = document.createElement("span");
-    spanEl.innerText = 1;
-    spanEl.className = "quantity-text center";
-    listItemEl.append(spanEl);
-
-    const addButtonEl = document.createElement("button");
-    // console.log("Button: ", addButtonEl)
-    addButtonEl.className = "quantity-btn add-btn center";
-    addButtonEl.innerText = "+";
-    listItemEl.append(addButtonEl);
-    addButtonEl.addEventListener("click", (event) => {
-      console.log("click");
-      addToCart(cart, cartData);
-      renderCartItems(cartData);
-    });
-    cartItemListEl.append(listItemEl)
-  }
-}
-renderCartItems(cartData)
-
 function addToCart(storeItem, cartData) {
   let foundItem = false
 
@@ -267,8 +171,10 @@ function addToCart(storeItem, cartData) {
     // console.log("Inside the loop: ", cartItemId);
 
     if (cartItemId === storeItemId) {
-      foundItem = true;
+      
       cartItem.quantity += 1
+
+      foundItem = true
     }
   }
   if (!foundItem) {
@@ -278,8 +184,118 @@ function addToCart(storeItem, cartData) {
     }
     cartData.push(newCartItem)
   }
-  console.log("Inside CartData: ", cartData);
 }
-addToCart(storeData[0], cartData)
-addToCart(storeData[0], cartData)
 
+function removeFromCart(storeItem, cartData) {
+  // console.log("inside remove from cart: ", removeFromCart)
+
+  for (let i = 0; i < cartData.length; i++) {
+    const cartItem = cartData[i];
+
+    const cartItemId = cartItem.item.id;
+    const storeItemId = storeItem.id;
+    // console.log("Inside the loop: ", cartItemId);
+    if (storeItemId === cartItemId) {
+      if (cartItem.quantity === 1) {
+        // removve from cart
+        cartData.splice(i, 1);
+      } else {
+        cartItem.quantity = cartItem.quantity - 1;
+      }
+    }
+  }
+}
+
+//Bridges
+const storeItemListEl = document.querySelector(".store--item-list");
+// console.log("storeItemListEl: ", storeItemListEl);
+const cartItemListEl = document.querySelector(".cart--item-list");
+// console.log("cartItemListEl: ", cartItemListEl)
+
+function renderStoreItemList(items) {
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i]
+
+    const listItemEl = document.createElement("li")
+   
+    const containerEl = document.createElement("div")
+    containerEl.className = "store--item-icon"
+
+    const imageEl = document.createElement("img")
+    const imageSrcEl = item.image_src
+    imageEl.src = imageSrcEl
+    imageEl.alt = item.name
+
+    containerEl.append(imageEl)
+
+    listItemEl.append(containerEl)
+
+    const addCartButtonEl = document.createElement("button")
+    addCartButtonEl.innerText = "Add To Cart"
+
+    addCartButtonEl.addEventListener("click", () => {
+      addToCart(item, cartData)
+      renderCartItems(cartData)
+    })
+
+    listItemEl.append(addCartButtonEl);
+
+    storeItemListEl.append(listItemEl);
+  }
+}
+renderStoreItemList(storeData);
+
+function renderCartItems(items) {
+
+  cartItemListEl.innerHTML = "";
+
+  for (let i = 0; i < items.length; i++) {
+    const cartItem = items[i]
+    const item = cartItem.item
+  
+    const listItemEl = document.createElement("li")
+   
+    const imageEl = document.createElement("img")
+    const imageSrcEl = cartItem.item.image_src
+    imageEl.src = imageSrcEl
+    imageEl.alt = cartItem.item.name
+
+    listItemEl.append(imageEl)
+
+    const paragraphEl = document.createElement("p")
+    paragraphEl.innerText = cartItem.item.name
+
+    listItemEl.append(paragraphEl)
+
+    const removeButtonEl = document.createElement("button")
+    removeButtonEl.className = "quantity-btn remove-btn center"
+    removeButtonEl.innerText = "-"
+   
+    removeButtonEl.addEventListener("click", () => {
+      removeFromCart(item, cartData)
+      renderCartItems(cartData)
+    })
+    
+    listItemEl.append(removeButtonEl)
+
+    const spanEl = document.createElement("span")
+    spanEl.innerText = 1
+    spanEl.className = "quantity-text center";
+    listItemEl.append(spanEl); 
+
+    const addButtonEl = document.createElement("button")
+    addButtonEl.className = "quantity-btn add-btn center"
+    addButtonEl.innerText = "+"
+   
+
+    addButtonEl.addEventListener("click", () => {
+      console.log("click Item: ", item)
+      addToCart(item, cartData)
+      renderCartItems(cartData)
+    })
+
+    listItemEl.append(addButtonEl)
+
+    cartItemListEl.append(listItemEl)
+  }
+}
